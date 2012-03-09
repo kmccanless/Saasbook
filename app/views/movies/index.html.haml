@@ -4,12 +4,18 @@
 %table#movies
   %thead
     %tr
-      %th Movie Title
+      -if @model.sort == "title"
+        %th{:class => "hilite"}= link_to "Title", sort_movies_path("title"),{:id=>"title_header"}
+      -else
+        %th= link_to "Title", sort_movies_path("title"),{:id=>"title_header"}
       %th Rating
-      %th Release Date
+      -if @model.sort == "date"
+        %th{:class => "hilite"}= link_to "Release Date", sort_movies_path("date"),{:id=>"release_date_header",:class=>"hilite"}
+      -else
+        %th= link_to "Release Date", sort_movies_path("date"),{:id=>"release_date_header"}
       %th More Info
   %tbody
-    - @movies.each do |movie|
+    - @model.movies.each do |movie|
       %tr
         %td= movie.title 
         %td= movie.rating

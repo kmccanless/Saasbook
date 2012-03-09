@@ -1,5 +1,6 @@
 class MoviesController < ApplicationController
-
+  x = Pathname.new('C:/Users/kmccanless/hw2_rottenpotatoes/app/models/movie_view.rb')
+  require x
   def show
     id = params[:id] # retrieve movie ID from URI route
     @movie = Movie.find(id) # look up movie by unique ID
@@ -7,7 +8,26 @@ class MoviesController < ApplicationController
   end
 
   def index
-    @movies = Movie.all
+   # debugger
+    logger.debug("index")
+    @model = MovieView.new
+    @model.movies = Movie.all
+
+  end
+
+  def sort
+    if params[:sort] == "title"
+      logger.debug("title")
+      @model = MovieView.new
+      @model.sort = "title"
+      @model.movies = MovieView.order("title")
+    elsif params[:sort] == "date"
+      logger.debug("date")
+      @model = MovieView.new
+      @model.sort = "date"
+      @model.movies = MovieView.order("release_date")
+    end
+    render "index"
   end
 
   def new
