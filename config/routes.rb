@@ -5,6 +5,7 @@ Rottenpotatoes::Application.routes.draw do
   # Sample of regular route:
   #   match 'products/:id' => 'catalog#view'
   match 'movies/sort/:sort' => 'movies#sort', :as => "sort_movies"
+  match 'movies/filter' =>   'movies#filter', :as => "filter_movies"
   #match 'movies/:sort' => 'movies#index', :constraints => {:sort => /\w+/}
   #match 'movies/:sort' => 'movies#index', :constraints => {:id => /\d+/}
   # Keep in mind you can assign values other than :controller and :action

@@ -14,6 +14,14 @@ class MoviesController < ApplicationController
     @model.movies = Movie.all
 
   end
+  def filter
+   # debugger
+    ratings = params[:ratings]
+    filter = ratings.keys
+    @model = MovieView.new
+    @model.movies = MovieView.all(:conditions => {:rating  => filter})
+    render "index"
+  end
 
   def sort
     if params[:sort] == "title"
