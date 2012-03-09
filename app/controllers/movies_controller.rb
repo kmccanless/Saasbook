@@ -1,6 +1,6 @@
 class MoviesController < ApplicationController
-  x = Pathname.new('C:/Users/kmccanless/hw2_rottenpotatoes/app/models/movie_view.rb')
-  require x
+  x = Pathname.new('../models/movie_view.rb')
+  require_relative x
   def show
     id = params[:id] # retrieve movie ID from URI route
     @movie = Movie.find(id) # look up movie by unique ID
