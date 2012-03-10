@@ -10,15 +10,38 @@ class MoviesController < ApplicationController
   def index
    # debugger
     logger.debug("index")
+    logger.debug(params[:sort])
+    logger.debug(params[:ratings])
     @model = MovieView.new
-    @model.movies = Movie.all
-
+    if params[:ratings]
+      ratings = params[:ratings]
+      filter = ratings.keys
+      session[:filter] = filter
+      @model.movies = MovieView.all(:conditions => {:rating  => session[:filter]})
+    else
+      session[:filter] = nil
+      @model.movies = MovieView.all
+    end
+    if params[:sort] == "title"
+      logger.debug("title")
+      @model = MovieView.new
+      @model.sort = "title"
+      @model.movies = MovieView.all(:conditions => {:rating  => "PG"})
+      @model.movies.sort_by { |m| m.title}
+    elsif params[:sort] == "date"
+      logger.debug("date")
+      @model = MovieView.new
+      @model.sort = "date"
+      @model.movies = MovieView.order("release_date")
+    end
   end
+
   def filter
    # debugger
     ratings = params[:ratings]
     filter = ratings.keys
     @model = MovieView.new
+    @model.filter = filter
     @model.movies = MovieView.all(:conditions => {:rating  => filter})
     render "index"
   end

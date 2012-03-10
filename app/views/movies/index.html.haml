@@ -1,6 +1,6 @@
 -#  This file is app/views/movies/index.html.haml
 %h1 All Movies
-= form_tag filter_movies_path, :method => :get do
+= form_tag "/movies/", :method => :get do
   Include:
   - @model.all_ratings.each do |rating|
     = rating
@@ -25,6 +25,7 @@
         %td= movie.title 
         %td= movie.rating
         %td= movie.release_date
-        %td= link_to "More about #{movie.title}", movie_path(movie)
+        %td= link_to "More about #{movie.title}", show_movies_path(movie)
 
-= link_to 'Add new movie', new_movie_path
+= link_to 'Add new movie', new_movies_path
+= hidden_field_tag "sort","#{@model.sort}"
