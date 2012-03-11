@@ -5,10 +5,13 @@ Rottenpotatoes::Application.routes.draw do
   # Sample of regular route:
   #   match 'products/:id' => 'catalog#view'
   match "movies" => "movies#index", :as => "movies"
-  match "movies/sort/:sort" => "movies#index", :as => "sort_movies"
+  match "movies/sort/:sort" => "movies#sort", :as => "sort_movies"
   match "movies/filter/" => "movies#index", :as => "filter_movies"
-  match "movies/show/:Id" => "movies#show", :as => "show_movies"
-  match "movies/new" => "movies#new", :as => "new_movies"
+  match "movies/show/:id" => "movies#show", :as => "show_movie"
+  match "movies/new" => "movies#new", :as => "new_movie"
+  match "movies/:id/edit" => "movies#edit", :as => "edit_movie"
+  match "movies/update/:id" => "movies#update", :as => "update_movie", :via => :put
+  match "movies/destroy/:id" => "movies#destroy", :as => "movie", :via => :delete
   #match 'movies/sort/:sort' => 'movies#sort', :as => "sort_movies"
   #match 'movies/:sort/:filter' => 'movies#index', :as => "sort_movies"
  # match 'movies/filter' =>   'movies#filter', :as => "filter_movies"

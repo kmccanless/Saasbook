@@ -13,50 +13,40 @@ class MoviesController < ApplicationController
     logger.debug(params[:sort])
     logger.debug(params[:ratings])
     @model = MovieView.new
+    @model.filter = []
+   # if session[:model].nil?
+    #  @model = MovieView.new
+     # @model.filter = []
+    #else
+    #  @model = session[:model]
+    #  @model.filter = []
+    #end
+
     if params[:ratings]
       ratings = params[:ratings]
       filter = ratings.keys
-      session[:filter] = filter
-      @model.movies = MovieView.all(:conditions => {:rating  => session[:filter]})
+      @model.filter = filter
+      @model.movies = MovieView.all(:conditions => {:rating  => filter})
+      session[:model] = @model
     else
-      session[:filter] = nil
       @model.movies = MovieView.all
+      session[:model] = @model
     end
-    if params[:sort] == "title"
-      logger.debug("title")
-      @model = MovieView.new
-      @model.sort = "title"
-      @model.movies = MovieView.all(:conditions => {:rating  => "PG"})
-      @model.movies.sort_by { |m| m.title}
-    elsif params[:sort] == "date"
-      logger.debug("date")
-      @model = MovieView.new
-      @model.sort = "date"
-      @model.movies = MovieView.order("release_date")
-    end
-  end
-
-  def filter
-   # debugger
-    ratings = params[:ratings]
-    filter = ratings.keys
-    @model = MovieView.new
-    @model.filter = filter
-    @model.movies = MovieView.all(:conditions => {:rating  => filter})
-    render "index"
   end
 
   def sort
     if params[:sort] == "title"
       logger.debug("title")
-      @model = MovieView.new
+      @model = session[:model]
       @model.sort = "title"
-      @model.movies = MovieView.order("title")
+      @model.movies.sort! { |a,b| a.title <=> b.title}
+      session[:model] = @model
     elsif params[:sort] == "date"
       logger.debug("date")
-      @model = MovieView.new
+      @model = session[:model]
       @model.sort = "date"
-      @model.movies = MovieView.order("release_date")
+      @model.movies.sort! { |a,b| a.release_date <=> b.release_date}
+      session[:model] = @model
     end
     render "index"
   end

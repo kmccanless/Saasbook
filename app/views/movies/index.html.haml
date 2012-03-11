@@ -1,11 +1,14 @@
 -#  This file is app/views/movies/index.html.haml
 %h1 All Movies
-= form_tag "/movies/", :method => :get do
+= form_tag "/movies/filter", :method => :get do
   Include:
   - @model.all_ratings.each do |rating|
     = rating
-    = check_box_tag "ratings[#{rating}]"
-  = submit_tag 'Refresh'
+    -if @model.filter.include?(rating)
+      = check_box_tag "ratings[#{rating}]", "yes",true
+    -else
+      = check_box_tag "ratings[#{rating}]"
+  = submit_tag 'Refresh', :id => "ratings_submit"
 %table#movies
   %thead
     %tr
@@ -25,7 +28,7 @@
         %td= movie.title 
         %td= movie.rating
         %td= movie.release_date
-        %td= link_to "More about #{movie.title}", show_movies_path(movie)
+        %td= link_to "More about #{movie.title}", show_movie_path(movie)
 
-= link_to 'Add new movie', new_movies_path
-= hidden_field_tag "sort","#{@model.sort}"
+= link_to 'Add new movie', new_movie_path
+
