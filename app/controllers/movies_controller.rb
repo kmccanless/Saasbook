@@ -3,7 +3,8 @@ class MoviesController < ApplicationController
   require_relative x
   def show
     id = params[:id] # retrieve movie ID from URI route
-    @movie = Movie.find(id) # look up movie by unique ID
+    @model = session[:model]
+    @model.movie = MovieView.find(id) # look up movie by unique ID
     # will render app/views/movies/show.<extension> by default
   end
 
@@ -14,6 +15,7 @@ class MoviesController < ApplicationController
     logger.debug(params[:ratings])
     @model = MovieView.new
     @model.filter = []
+    @model.sort = "none"
    # if session[:model].nil?
     #  @model = MovieView.new
      # @model.filter = []
@@ -35,19 +37,17 @@ class MoviesController < ApplicationController
   end
 
   def sort
+    @model = session[:model]
     if params[:sort] == "title"
       logger.debug("title")
-      @model = session[:model]
       @model.sort = "title"
       @model.movies.sort! { |a,b| a.title <=> b.title}
-      session[:model] = @model
     elsif params[:sort] == "date"
       logger.debug("date")
-      @model = session[:model]
       @model.sort = "date"
       @model.movies.sort! { |a,b| a.release_date <=> b.release_date}
-      session[:model] = @model
     end
+    session[:model] = @model
     render "index"
   end
 
