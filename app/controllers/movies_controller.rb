@@ -13,16 +13,16 @@ class MoviesController < ApplicationController
     logger.debug("index")
     logger.debug(params[:sort])
     logger.debug(params[:ratings])
-    @model = MovieView.new
-    @model.filter = []
-    @model.sort = "none"
-   # if session[:model].nil?
-    #  @model = MovieView.new
-     # @model.filter = []
-    #else
-    #  @model = session[:model]
-    #  @model.filter = []
-    #end
+   # @model = MovieView.new
+    #@model.filter = []
+    #@model.sort = "none"
+    if session[:model].nil?
+      @model = MovieView.new
+      @model.filter = []
+      @model.sort = "none"
+    else
+      @model = session[:model]
+    end
 
     if params[:ratings]
       ratings = params[:ratings]
@@ -32,8 +32,11 @@ class MoviesController < ApplicationController
       session[:model] = @model
     else
       @model.movies = MovieView.all
+      @model.filter = []
       session[:model] = @model
     end
+
+    redirect_to "/movies/sort/" + @model.sort
   end
 
   def sort
